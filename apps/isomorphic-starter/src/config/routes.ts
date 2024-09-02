@@ -49,9 +49,11 @@ export const routes = {
   appointment: {
     dashboard: "/appointment",
     appointmentList: "/appointment/list",
+    listMemories: "/listMemories"
   },
   executive: {
     dashboard: "/executive",
+    chat: "/chat",
   },
   jobBoard: {
     dashboard: "/job-board",
@@ -143,5 +145,7 @@ export const routes = {
   forgotPassword: "/forgot-password",
   signIn: "/",
   signUp: "/signup",
-  dashboard: "/dashboard"
+  dashboard: "/dashboard",
+  chat: "/chat",
+  listMemories: "/listMemories"
 };

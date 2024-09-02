@@ -1,11 +1,12 @@
 import axios from "axios";
 
-const urlBack = process.env.NEXT_PUBLIC_API_URL;
-console.log("UrlBack", urlBack);
+console.log("urlBack",process.env.NEXT_PUBLIC_API_URL);
+const urlBack = process.env.NEXT_PUBLIC_API_URL
+
 
 interface MemoryParams {
-  post: string;
-  date: string;
+  memory: string;
+  post_at: string;
 }
 
 export const fetchMemories = async (apiToken: string) => {
@@ -21,6 +22,7 @@ export const fetchMemories = async (apiToken: string) => {
     throw new Error("Failed to fetch memories");
   }
 };
+
 
 export const createMemory = async (apiToken: string, params: MemoryParams) => {
   try {

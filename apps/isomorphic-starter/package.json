@@ -38,6 +38,7 @@
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tailwindcss/container-queries": "^0.1.1",
     "@uploadthing/react": "^6.7.2",
+    "axios": "^1.7.5",
     "clsx": "^2.1.1",
     "date-arithmetic": "^4.1.0",
     "dayjs": "^1.11.11",

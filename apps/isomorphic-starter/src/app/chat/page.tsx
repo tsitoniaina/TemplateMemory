@@ -1,7 +1,7 @@
-import FileDashboard from "@/app/shared/file/dashboard";
+import FileDashboard from "@/app/chat/file/dashboard";
 import { metaObject } from "@/config/site.config";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/[lang]/api/auth/[...nextauth]/auth-options";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth-options";
 import { redirect } from "next/navigation";
 import SessionProviderWrapper from "@/app/shared/SessionProviderWrapper";
 

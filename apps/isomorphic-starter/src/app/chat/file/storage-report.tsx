@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { createMemory, fetchMemories } from "@/app/api/memories/memoryService";
+import { createMemory, fetchMemories } from "@/app/services/memories/memoryService";
 import WidgetCard from "@components/cards/widget-card";
 import { Title, Text } from "rizzui";
 import cn from "@utils/class-names";
 import SimpleBar from "@ui/simplebar";
-import { useTranslation } from "@/app/i18n/client";
 import { useMedia } from "@hooks/use-media";
 
 const initialMessages = [
@@ -47,7 +46,7 @@ export default function ChatWidget({
   const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState("");
   const isMobile = useMedia("(max-width: 768px)", false);
-  const { t } = useTranslation(lang!, "common");
+//   const { t } = useTranslation(lang!, "common");
 
   const [memories, setMemories] = useState<Memory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -122,14 +121,12 @@ export default function ChatWidget({
   }
 
   return (
-      // <Title>Dashboard - {JSON.stringify(session)}</Title>
       <WidgetCard
-        title={t("text-chat")}
+        title={("text-chat")}
         titleClassName="font-normal text-gray-700 sm:text-base font-inter"
         descriptionClassName="text-gray-500 mt-1.5"
         className={className}
       >
-        {/* <Title>dashboard {JSON.stringify(session2)}</Title> */}
 
         <div className="relative">
           <SimpleBar style={{ maxHeight: 450 }}>
@@ -187,14 +184,14 @@ export default function ChatWidget({
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder={t("text-type-message")}
+                placeholder={("text-type-message")}
                 className="w-full p-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-white dark:border-gray-600"
               />
               <button
                 type="submit"
                 className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
               >
-                {t("text-send")}
+                {("text-send")}
               </button>
             </form>
           </div>

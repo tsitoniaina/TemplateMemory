@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import {jwtDecode} from 'jwt-decode'
 import {pagesOptions} from './pages-options';
 import {routes} from "@/config/routes.ts";
-import * as process from "node:process";
+// import * as process from "node:process";
 
 const axios = require('axios').default;
 
@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
     },
     session: {
         strategy: 'jwt',
-        maxAge: 30 * 24 * 60 * 60, // 30 days
+        maxAge: 30 * 24 * 60 * 60, 
     },
     callbacks: {
         async session({session, token}) {
@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
         },
         async redirect({url, baseUrl,}) {
             console.log(url, baseUrl)
-            return baseUrl + routes.dashboard;
+            return baseUrl + routes.Home;
         },
     },
     providers: [
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
                     // You need to provide your own logic here that takes the credentials
                     // submitted and returns either a object representing a user or value
                     // that is false/null if the credentials are invalid
-                    const query = await axios.post(`http://localhost:2222/api/login_check`, credentials, {
+                    const query = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/login_check`, credentials, {
                         headers: {
                             'Content-Type': 'application/json'
                         }

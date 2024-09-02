@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
         },
         async redirect({url, baseUrl,}) {
             console.log(url, baseUrl)
-            return baseUrl + routes.dashboard;
+            return baseUrl + routes.chat;
         },
     },
     providers: [

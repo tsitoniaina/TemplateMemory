@@ -787,6 +787,9 @@ importers:
       '@uploadthing/react':
         specifier: ^6.7.2
         version: 6.7.2(next@14.2.5(@babel/core@7.24.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(uploadthing@6.13.2(next@14.2.5(@babel/core@7.24.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwindcss@3.4.6(ts-node@10.9.2(@swc/core@1.6.13(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.3))))
+      axios:
+        specifier: ^1.7.5
+        version: 1.7.5
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { createMemory, fetchMemories } from "@/app/api/memories/memoryService";
+import { createMemory, fetchMemories } from "@/app/services/memories/memoryServices";
 import WidgetCard from "@components/cards/widget-card";
 import { Title, Text } from "rizzui";
 import cn from "@utils/class-names";
@@ -24,17 +24,6 @@ interface Memory {
   memory: string;
   post_at: string; 
 }
-
-const formatDate = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-};
 
 export default function ChatWidget({
   className,
@@ -69,11 +58,9 @@ export default function ChatWidget({
 
     try {
       if (!session?.payloads?.apiToken) throw new Error("Token manquant");
-
-      const currentDate = formatDate(new Date());
       const memoryParams = {
-        post: newMessage,
-        date: currentDate,
+        memory: newMessage,
+        post_at: new Date().toISOString()
       };
 
       await createMemory(session.payloads.apiToken, memoryParams);
@@ -122,85 +109,80 @@ export default function ChatWidget({
   }
 
   return (
-      // <Title>Dashboard - {JSON.stringify(session)}</Title>
-      <WidgetCard
-        title={t("text-chat")}
-        titleClassName="font-normal text-gray-700 sm:text-base font-inter"
-        descriptionClassName="text-gray-500 mt-1.5"
-        className={className}
-      >
-        {/* <Title>dashboard {JSON.stringify(session2)}</Title> */}
-
-        <div className="relative">
-          <SimpleBar style={{ maxHeight: 450 }}>
-            <div className="w-full pt-4 min-h-[42em] max-h-[42em]">
-              <div className="space-y-4">
-                {messages.map((msg) => (
+    <WidgetCard
+      title={t("text-chat")}
+      titleClassName="font-normal text-gray-700 sm:text-base font-inter"
+      descriptionClassName="text-gray-500 mt-1.5"
+      className={className}
+    >
+      <div className="relative">
+        <SimpleBar style={{ maxHeight: 450 }}>
+          <div className="w-full pt-4 min-h-[42em] max-h-[42em]">
+            <div className="space-y-4">
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={cn(
+                    "flex items-start",
+                    msg.alignment === "left"
+                      ? "text-left"
+                      : "flex-row-reverse text-right"
+                  )}
+                >
+                  {msg.avatar && (
+                    <img
+                      src={msg.avatar}
+                      alt={msg.user}
+                      className="w-10 h-10 rounded-full mr-4"
+                    />
+                  )}
                   <div
-                    key={msg.id}
                     className={cn(
-                      "flex items-start",
+                      "p-4 rounded-lg",
                       msg.alignment === "left"
-                        ? "text-left"
-                        : "flex-row-reverse text-right"
+                        ? "bg-gray-100 dark:bg-gray-800"
+                        : "bg-blue-100 dark:bg-blue-800"
                     )}
                   >
-                    {msg.avatar && (
-                      <img
-                        src={msg.avatar}
-                        alt={msg.user}
-                        className="w-10 h-10 rounded-full mr-4"
-                      />
-                    )}
-                    <div
-                      className={cn(
-                        "p-4 rounded-lg",
-                        msg.alignment === "left"
-                          ? "bg-gray-100 dark:bg-gray-800"
-                          : "bg-blue-100 dark:bg-blue-800"
-                      )}
-                    >
-                      <div className="flex justify-between items-center">
-                        <Text className="font-semibold text-gray-700 dark:text-gray-200">
-                          {msg.user}
-                        </Text>
-                        <Text className="text-sm text-gray-500">{msg.time}</Text>
-                      </div>
-                      <Text className="mt-2 text-gray-600 dark:text-gray-300">
-                        {msg.message}
+                    <div className="flex justify-between items-center">
+                      <Text className="font-semibold text-gray-700 dark:text-gray-200">
+                        {msg.user}
                       </Text>
+                      <Text className="text-sm text-gray-500">{msg.time}</Text>
                     </div>
+                    <Text className="mt-2 text-gray-600 dark:text-gray-300">
+                      {msg.message}
+                    </Text>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          </SimpleBar>
-          <div className="pt-4">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSendMessage();
-              }}
-              className="flex items-center space-x-2"
-            >
-              <input
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder={t("text-type-message")}
-                className="w-full p-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-white dark:border-gray-600"
-              />
-              <button
-                type="submit"
-                className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
-              >
-                {t("text-send")}
-              </button>
-            </form>
           </div>
+        </SimpleBar>
+        <div className="pt-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSendMessage();
+            }}
+            className="flex items-center space-x-2"
+          >
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder={t("text-type-message")}
+              className="w-full p-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            />
+            <button
+              type="submit"
+              className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+            >
+              {t("text-send")}
+            </button>
+          </form>
         </div>
-      </WidgetCard>
-
+      </div>
+    </WidgetCard>
   );
 }
-
